@@ -1,1 +1,0 @@
-import sys; import imcheck; sys.meta_path.insert(0, imcheck.Hook())
