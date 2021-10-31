@@ -9,8 +9,24 @@ class Hook:
             return
 
         check_import(fullname)
-
         return None
+
+
+def check_import(name):
+    locations = []
+
+    for root in sys.path:
+        root = pathlib.Path(root)
+        if not root.is_dir():
+            continue
+
+        if (root / f"{name}.py").exists() or (root / name / "__init__.py").exists():
+            locations.append(root)
+
+    if len(locations) > 1:
+        print(
+            f"Multiple locations for module {name}: {[str(loc) for loc in locations]}"
+        )
 
 
 def install_hook():
@@ -46,20 +62,3 @@ def get_path_file():
             return root / "imcheck.pth"
 
     raise RuntimeError("Could not find the site-packages folder")
-
-
-def check_import(name):
-    locations = []
-
-    for root in sys.path:
-        root = pathlib.Path(root)
-        if not root.is_dir():
-            continue
-
-        if (root / f"{name}.py").exists() or (root / name / "__init__.py").exists():
-            locations.append(root)
-
-    if len(locations) > 1:
-        print(
-            f"Multiple locations for module {name}: {[str(loc) for loc in locations]}"
-        )
