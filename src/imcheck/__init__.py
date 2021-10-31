@@ -28,6 +28,7 @@ def install_path_file(*, overwrite=False):
             "pass overwrite=True to re-install"
         )
 
+    print("Write", path_file)
     with path_file.open("wt") as fobj:
         fobj.write("import imcheck; imcheck.install_hook()")
 
@@ -41,10 +42,8 @@ def uninstall_path_file():
 def get_path_file():
     for root in sys.path:
         root = pathlib.Path(root)
-        if not root.is_dir() and root.name == "site-packages":
-            continue
-
-        return root / "imcheck.pth"
+        if root.is_dir() and root.name == "site-packages":
+            return root / "imcheck.pth"
 
     raise RuntimeError("Could not find the site-packages folder")
 
